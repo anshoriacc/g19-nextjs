@@ -1,8 +1,9 @@
 import { Button } from 'antd';
+import Link from 'next/link';
 
 export default function About() {
   return (
-    <section className="h-full max-h-[calc(100vh-4rem-300px)] bg-white px-[5%] sm:px-[10%] py-6">
+    <section className="h-full max-h-[calc(100vh-4rem-300px)] bg-white dark:bg-gray-900 px-[5%] sm:px-[10%] py-6">
       <h1 className="text-3xl text-center font-bold">G19 TOUR & TRAVEL</h1>
       <div className="flex flex-col gap-4 h-[calc(100%-51px)] items-center">
         <div className="w-full max-w-[450px] h-40 bg-gray-200 rounded-xl" />
@@ -14,9 +15,11 @@ export default function About() {
             memenuhi kebutuhan perjalanan anda. Jadilah bagian dari perjalanan
             kami dan rasakan pengalaman perjalanan yang luar biasa!
           </p>
-          <Button href="/" type="primary" size="large" className="bg-[#00aeef]">
-            Hubungi Kami
-          </Button>
+          <Link href="/">
+            <Button type="primary" size="large" className="bg-[#00aeef]">
+              Hubungi Kami
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

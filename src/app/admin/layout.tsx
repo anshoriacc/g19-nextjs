@@ -1,14 +1,9 @@
-import { Layout } from 'antd';
+import AdminLayout from '@/components/AdminLayout';
 
-export default function AdminLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Layout.Sider>sider</Layout.Sider>
-      {children}
-    </>
-  );
+  return <AdminLayout>{children}</AdminLayout>;
 }

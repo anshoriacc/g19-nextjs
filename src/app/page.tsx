@@ -1,13 +1,13 @@
 'use client';
 
-import { Divider, Layout } from 'antd';
+import { Layout } from 'antd';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import OurServices from '@/components/OurServices';
 
-export default function page() {
+export default function Home() {
   return (
-    <Layout.Content className='bg-gray-200'>
+    <Layout.Content className="bg-gray-200 flex flex-col">
       <Hero />
       <About />
       <OurServices />
