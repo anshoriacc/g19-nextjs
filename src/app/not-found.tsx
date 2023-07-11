@@ -1,17 +1,20 @@
 'use client';
 
-import { Button } from 'antd';
+import { Button, Result } from 'antd';
 
 export default function NotFound() {
   return (
-    <div className="w-full flex flex-col gap-2 justify-center items-center">
-      <p className="m-0 text-xl text-gray-400">ERROR</p>
-      <p className="m-0 text-8xl font-bold text-gray-400">404</p>
-      <p className="m-0 text-xl text-gray-400">PAGE NOT FOUND</p>
-      <Button href="/" type="primary">
-        Back to home.
-      </Button>
-      <div></div>
+    <div className="w-full bg-white dark:bg-gray-900 flex flex-col gap-2 justify-center items-center">
+      <Result
+        status="404"
+        title="404"
+        subTitle="Halaman yang anda akses tidak ditemukan."
+        extra={
+          <Button href="/" type="primary" className="bg-[#00aeef]">
+            Kembali ke Beranda
+          </Button>
+        }
+      />
     </div>
   );
 }
