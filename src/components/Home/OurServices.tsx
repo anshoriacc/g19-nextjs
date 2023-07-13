@@ -10,8 +10,26 @@ import tourImages from '@/assets/images/tour.avif';
 import clsx from 'clsx';
 
 export default function OurServices() {
-  const { data, isFetching, error, refetch } = useGetProductListQuery({
+  const {
+    data: vehicleData,
+    isFetching: isFetchingVehicle,
+    isSuccess: isSuccessVehicle,
+    error: errorVehicle,
+    refetch: refetchVehicle,
+  } = useGetProductListQuery({
     type: 'rental',
+    limit: 4,
+    sortBy: 'newest',
+  });
+
+  const {
+    data: tourData,
+    isFetching: isFetchingTour,
+    isSuccess: isSuccessTour,
+    error: errorTour,
+    refetch: refetchTour,
+  } = useGetProductListQuery({
+    type: 'tour',
     limit: 4,
     sortBy: 'newest',
   });
@@ -55,11 +73,13 @@ export default function OurServices() {
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-2xl font-bold m-0">RENTAL KENDARAAN</h3>
-            <Link href="/rental" className='font-semibold'>Lebih banyak</Link>
+            <Link href="/rental" className="font-semibold">
+              Lebih banyak
+            </Link>
           </div>
           <div className="grid grid-cols-[repeat(2,_1fr)] md:grid-cols-[repeat(3,_1fr)] xl:grid-cols-[repeat(4,_1fr)] gap-4">
-            {data
-              ? data.data.map((vehicle, index) => (
+            {isSuccessVehicle
+              ? vehicleData.data.map((vehicle, index) => (
                   <div
                     key={index}
                     className={clsx(
@@ -89,21 +109,41 @@ export default function OurServices() {
           </div>
         </div>
         <div className="mb-4">
-        <div className="flex justify-between items-center mb-3">
+          <div className="flex justify-between items-center mb-3">
             <h3 className="text-2xl font-bold m-0">TRIP WISATA</h3>
-            <Link href="/tour" className='font-semibold'>Lebih banyak</Link>
+            <Link href="/tour" className="font-semibold">
+              Lebih banyak
+            </Link>
           </div>
           <div className="grid grid-cols-[repeat(2,_1fr)] md:grid-cols-[repeat(3,_1fr)] xl:grid-cols-[repeat(4,_1fr)] gap-4">
-            {[...Array(4)].map((_, index) => (
-              <div
-                key={index}
-                className={clsx(
-                  index === 2 ? 'hidden' : 'md:inline',
-                  index === 3 ? 'hidden' : 'xl:inline',
-                  'bg-gray-500 rounded-xl h-60 animate-pulse'
-                )}
-              />
-            ))}
+            {isSuccessTour && tourData.data.length > 0
+              ? tourData.data.map((tour, index) => (
+                  <div
+                    key={index}
+                    className={clsx(
+                      index === 2 ? 'hidden' : 'md:inline',
+                      index === 3 ? 'hidden' : 'xl:inline',
+                      'bg-white dark:bg-gray-900 rounded-xl h-60 overflow-hidden relative shadow-sm hover:shadow-lg'
+                    )}
+                  >
+                    <Image
+                      src={tour.images[0]}
+                      alt={tour.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ))
+              : [...Array(4)].map((_, index) => (
+                  <div
+                    key={index}
+                    className={clsx(
+                      index === 2 ? 'hidden' : 'md:inline',
+                      index === 3 ? 'hidden' : 'xl:inline',
+                      'bg-gray-500 rounded-xl h-60 animate-pulse'
+                    )}
+                  />
+                ))}
           </div>
         </div>
       </div>
