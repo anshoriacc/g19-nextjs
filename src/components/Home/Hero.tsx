@@ -16,12 +16,18 @@ export default function Hero() {
     ],
     []
   );
+
   return (
-    <section className="h-[calc(calc(100vh-4rem)/2)]">
-      <Carousel autoplay>
+    <section>
+      <Carousel>
         {images.map((image, index) => (
-          <Link key={index} href={image.url} target='_blank'>
-            <div className="bg-gray-200 h-[calc(calc(100vh-4rem)/2)] relative">
+          <div key={index} className="p-4 h-full flex">
+            <Link
+              href={image.url}
+              target="_blank"
+              className="block w-full max-w-[960px] mx-auto aspect-[3] relative rounded-lg overflow-hidden shadow-md"
+              title="image"
+            >
               <Image
                 src={image.src}
                 alt="bromo"
@@ -29,8 +35,8 @@ export default function Hero() {
                 fill
                 className="object-cover"
               />
-            </div>
-          </Link>
+            </Link>
+          </div>
         ))}
       </Carousel>
     </section>

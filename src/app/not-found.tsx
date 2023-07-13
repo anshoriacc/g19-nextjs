@@ -10,7 +10,7 @@ export default function NotFound() {
         title="404"
         subTitle="Halaman yang anda akses tidak ditemukan."
         extra={
-          <Button href="/" type="primary" className="bg-[#00aeef]">
+          <Button href="/" type="primary">
             Kembali ke Beranda
           </Button>
         }

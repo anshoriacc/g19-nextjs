@@ -9,12 +9,15 @@ import AuthCarousel from './AuthCarousel';
 import { redirect, usePathname } from 'next/navigation';
 
 export default function AuthLayout({ children }: PropsWithChildren) {
-  const { accessToken } = useAppSelector((state) => state.auth);
+  const { accessToken, userInfo } = useAppSelector((state) => state.auth);
   const pathname = usePathname();
 
   useEffect(() => {
-    if (accessToken) redirect('/');
-  }, [accessToken]);
+    if (accessToken) {
+      if (userInfo.role === 'admin') return redirect('/admin');
+      return redirect('/');
+    }
+  }, [accessToken, userInfo.role]);
 
   return (
     <Layout.Content className="relative">

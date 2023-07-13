@@ -12,7 +12,7 @@ export default function Footer() {
           <Image src={g19logo} alt="G19 logo" priority height={32} />
         </Link>
         <div className="flex gap-4">
-          <Link href="/rental">RENTAL MOBIL</Link>|
+          <Link href="/rental">RENTAL KENDARAAN</Link>|
           <Link href="/tour">TRIP WISATA</Link>
         </div>
       </div>

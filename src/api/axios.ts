@@ -10,16 +10,27 @@ interface RequestProps {
   accessToken?: string;
   data?: any;
   params?: any;
+  formdata?: boolean;
 }
 
 export const axiosBaseQuery =
   () =>
-  async ({ url, method, accessToken, data, params }: RequestProps) => {
+  async ({
+    url,
+    method,
+    accessToken,
+    data,
+    params,
+    formdata,
+  }: RequestProps) => {
     try {
       const response = await axiosInstance({
         url,
         method,
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': formdata ? 'multipart/form-data' : 'application/json',
+        },
         data,
         params,
       });

@@ -16,27 +16,26 @@ import { logout } from '@/redux/reducers/authSlice';
 export default function Navbar() {
   const { accessToken, userInfo } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
 
   const logoutHandler = useCallback(() => {
     dispatch(logout());
     message.success('Berhasil keluar.');
   }, [dispatch]);
 
-  const pathname = usePathname();
-
   const menuItems = useMemo<MenuProps['items']>(
     () => [
       {
         label: 'Layanan',
-        key: 'layanan',
+        key: 'product',
         children: [
           {
-            label: <Link href="/rental">Rental Mobil</Link>,
-            key: 'rental',
+            label: <Link href="/rental">Rental Kendaraan</Link>,
+            key: '/rental',
           },
           {
             label: <Link href="/tour">Trip Wisata</Link>,
-            key: 'tour',
+            key: '/tour',
           },
         ],
       },
@@ -48,7 +47,10 @@ export default function Navbar() {
     () => [
       {
         label: (
-          <Link href="/profile" className="flex flex-col">
+          <Link
+            href={userInfo.role === 'admin' ? '/admin' : '/profile'}
+            className="flex flex-col"
+          >
             <span className="font-bold">{userInfo?.username}</span>
             <Tag
               color={userInfo?.role === 'admin' ? 'gold' : 'blue'}
@@ -89,20 +91,22 @@ export default function Navbar() {
 
   return (
     <Layout.Header className="w-full bg-white dark:bg-gray-900 px-[5%] border-b border-b-gray-300 dark:border-b-gray-600">
-      <div className="flex justify-between gap-4 items-center">
+      <div className="max-w-[1400px] mx-auto flex justify-between gap-4 items-center">
         <div className="flex gap-2 flex-1 items-center">
-          <Link href="/" className="h-8 w-[75px] hover:animate-pulse">
+          <Link href="/" className="hover:animate-pulse relative">
             <Image
               src={g19logo}
               alt="G19 logo"
               priority
               height={32}
               width={75}
+              className="m-0"
             />
           </Link>
           <Menu
             mode="horizontal"
             items={menuItems}
+            selectedKeys={[pathname]}
             forceSubMenuRender
             className="bg-transparent"
           />

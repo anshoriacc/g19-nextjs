@@ -69,7 +69,6 @@ export default function Register() {
 
   const submitHandler = useCallback(
     (values: Body) => {
-      console.log('values', values);
       register(values);
     },
     [register]
@@ -87,7 +86,7 @@ export default function Register() {
       form={form}
       onFinish={submitHandler}
       layout="vertical"
-      className="bg-white dark:bg-gray-900 p-4 sm:p-8 rounded-md w-[90vw] max-w-[400px] shadow overflow-auto max-h-[calc(100vh-8rem-40px)]"
+      className="bg-white dark:bg-gray-900 p-4 sm:p-8 rounded-md w-[90vw] max-w-[400px] shadow-md overflow-auto max-h-[calc(100vh-8rem-40px)]"
     >
       <div className={clsx(step !== 1 ? 'hidden' : '')}>
         <Form.Item
@@ -152,7 +151,7 @@ export default function Register() {
             type="primary"
             disabled={!submittable1}
             onClick={nextHandler}
-            className="bg-[#00aeef] w-full sm:w-fit flex gap-1 items-center justify-center"
+            className="w-full sm:w-fit flex gap-1 items-center justify-center"
           >
             Selanjutnya
           </Button>
@@ -198,7 +197,7 @@ export default function Register() {
               htmlType="submit"
               disabled={step !== 2 || !submittable}
               loading={isLoading}
-              className="bg-[#00aeef] w-full sm:w-fit"
+              className="w-full sm:w-fit"
             >
               Submit
             </Button>

@@ -16,7 +16,8 @@ export default function Login() {
 
   useEffect(() => {
     form.validateFields({ validateOnly: true }).then(
-      () => {
+      (e) => {
+        console.log('e', e)
         setSubmittable(true);
       },
       () => {
@@ -44,7 +45,7 @@ export default function Login() {
       initialValues={{ rememberMe: true }}
       onFinish={submitHandler}
       layout="vertical"
-      className="bg-white dark:bg-gray-900 p-4 sm:p-8 rounded-md w-[90vw] max-w-[400px] shadow overflow-hidden"
+      className="bg-white dark:bg-gray-900 p-4 sm:p-8 rounded-md w-[90vw] max-w-[400px] shadow-md overflow-hidden"
     >
       <Form.Item
         label="Email atau username"
@@ -73,7 +74,7 @@ export default function Login() {
             htmlType="submit"
             disabled={!submittable || isLoading}
             loading={isLoading}
-            className="bg-[#00aeef] w-full sm:w-fit"
+            className="w-full sm:w-fit"
           >
             Masuk
           </Button>

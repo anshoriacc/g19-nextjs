@@ -5,6 +5,10 @@ import { encryptTransform } from 'redux-persist-transform-encrypt';
 
 import authSlice from './reducers/authSlice';
 import { authQuery } from './reducers/authQuery';
+import { profileQuery } from './reducers/profileQuery';
+import { productQuery } from './reducers/productQuery';
+import { reservationQuery } from './reducers/reservationQuery';
+import { bannerQuery } from './reducers/bannerQuery';
 
 const key = process.env.NEXT_PUBLIC_KEY;
 
@@ -12,7 +16,13 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: [authQuery.reducerPath],
+  blacklist: [
+    authQuery.reducerPath,
+    profileQuery.reducerPath,
+    productQuery.reducerPath,
+    reservationQuery.reducerPath,
+    bannerQuery.reducerPath,
+  ],
   transforms: [
     encryptTransform({
       secretKey: key,
@@ -26,6 +36,10 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: authSlice,
   [authQuery.reducerPath]: authQuery.reducer,
+  [profileQuery.reducerPath]: profileQuery.reducer,
+  [productQuery.reducerPath]: productQuery.reducer,
+  [reservationQuery.reducerPath]: reservationQuery.reducer,
+  [bannerQuery.reducerPath]: bannerQuery.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
@@ -35,7 +49,12 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(authQuery.middleware),
+    })
+      .concat(authQuery.middleware)
+      .concat(profileQuery.middleware)
+      .concat(productQuery.middleware)
+      .concat(reservationQuery.middleware)
+      .concat(bannerQuery.middleware),
 });
 
 export const persistor = persistStore(store);

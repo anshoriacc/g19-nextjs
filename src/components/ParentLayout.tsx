@@ -53,7 +53,10 @@ export default function ParentLayout({ children }: PropsWithChildren) {
           <AntdConfigProvider>
             <Layout className="min-h-[100vh]">
               <Navbar />
-              <Layout hasSider className="min-h-[calc(100vh-4rem)]">
+              <Layout
+                hasSider
+                className="min-h-[calc(100vh-4rem)] bg-gray-100 dark:bg-gray-800"
+              >
                 {children}
               </Layout>
               <Footer />
