@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 
 import authSlice from './reducers/authSlice';
+import reservationSlice from './reducers/reservationSlice';
 import { authQuery } from './reducers/authQuery';
 import { profileQuery } from './reducers/profileQuery';
 import { productQuery } from './reducers/productQuery';
@@ -35,6 +36,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth: authSlice,
+  reservation: reservationSlice,
   [authQuery.reducerPath]: authQuery.reducer,
   [profileQuery.reducerPath]: profileQuery.reducer,
   [productQuery.reducerPath]: productQuery.reducer,

@@ -24,6 +24,7 @@ import AddVehicle from '@/components/admin/AddVehicle';
 import { useAppSelector } from '@/hooks';
 import UpdateVehicle from '@/components/admin/UpdateVehicle';
 import { useGetReservationListQuery } from '@/redux/reducers/reservationQuery';
+import dayjs from 'dayjs';
 
 export interface DataType {
   number: number;
@@ -87,6 +88,8 @@ export default function ReservationAdmin() {
       {
         title: '#',
         dataIndex: 'number',
+        render: (value, record, index) =>
+          (params.pagination.current - 1) * params.pagination.pageSize + value,
       },
       {
         title: 'Tipe',
@@ -95,10 +98,12 @@ export default function ReservationAdmin() {
       {
         title: 'Tanggal Mulai',
         dataIndex: 'startDate',
+        render: (value, record, index) => dayjs(value).format('DD MMM YYYY'),
       },
       {
         title: 'Tanggal Selesai',
         dataIndex: 'endDate',
+        render: (value, record, index) => dayjs(value).format('DD MMM YYYY'),
       },
       {
         title: 'Tambahan',
@@ -113,11 +118,15 @@ export default function ReservationAdmin() {
         dataIndex: 'payment',
       },
       {
+        title: 'Status',
+        dataIndex: 'status',
+      },
+      {
         title: 'Aksi',
         dataIndex: 'action',
       },
     ],
-    []
+    [params.pagination]
   );
 
   const tableData = useMemo<DataType[]>(
@@ -138,9 +147,8 @@ export default function ReservationAdmin() {
     setSelectedData(null);
   }, []);
 
-
   return (
-    <section className="p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
+    <section className="min-h-full p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
       <h1 className="text-3xl font-bold">Reservasi</h1>
       {error && !isFetching && (
         <Alert

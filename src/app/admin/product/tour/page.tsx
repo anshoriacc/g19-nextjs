@@ -70,7 +70,7 @@ export default function TourAdmin() {
 
   const { data, isFetching, error, refetch } = useGetProductListQuery(
     {
-      type: 'rental',
+      type: 'tour',
       q: debouncedSearchQuery,
       limit: params.pagination.pageSize,
       page: params.pagination.current,
@@ -95,6 +95,8 @@ export default function TourAdmin() {
       {
         title: '#',
         dataIndex: 'number',
+        render: (value) =>
+          (params.pagination.current - 1) * params.pagination.pageSize + value,
       },
       {
         title: 'Nama',
@@ -224,7 +226,7 @@ export default function TourAdmin() {
   }, [errorDeleting, isDeleted]);
 
   return (
-    <section className="p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
+    <section className="min-h-full p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
       <h1 className="text-3xl font-bold">Trip Wisata</h1>
       <div className="flex flex-col-reverse sm:flex-row gap-2 justify-between sm:items-center mb-3">
         <Input.Search

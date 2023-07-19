@@ -7,7 +7,10 @@ import 'antd/dist/reset.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'G19 Tour & Travel',
+  title: {
+    template: '%s | G19 Tour & Travel',
+    default: 'G19 Tour & Travel',
+  },
   description: 'G19 Tour & Travel website',
 };
 

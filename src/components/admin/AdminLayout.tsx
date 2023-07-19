@@ -1,10 +1,10 @@
 'use client';
 
 import { PropsWithChildren, useMemo, useEffect } from 'react';
-import { notFound, redirect, usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-import { Layout, Menu, MenuProps } from 'antd';
+import { Layout, Menu, MenuProps, message } from 'antd';
 import { RiCarFill, RiDashboardFill, RiHistoryFill } from 'react-icons/ri';
 import { useAppSelector } from '@/hooks';
 import { CgMenuGridO } from 'react-icons/cg';
@@ -16,7 +16,10 @@ export default function AdminLayout({ children }: PropsWithChildren) {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (userInfo.role !== 'admin') return redirect('/404');
+    if (userInfo.role !== 'admin') {
+      message.error('Silakan masuk sebagai administrator');
+      redirect('/');
+    }
   }, [userInfo.role]);
 
   const menuItems = useMemo<MenuProps['items']>(

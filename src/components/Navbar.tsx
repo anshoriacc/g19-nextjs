@@ -90,7 +90,7 @@ export default function Navbar() {
   );
 
   return (
-    <Layout.Header className="w-full bg-white dark:bg-gray-900 px-[5%] border-b border-b-gray-300 dark:border-b-gray-600">
+    <Layout.Header className="w-full bg-white dark:bg-gray-900 px-[5%] border-0 border-solid border-b border-b-gray-300 dark:border-b-gray-600">
       <div className="max-w-[1400px] mx-auto flex justify-between gap-4 items-center">
         <div className="flex gap-2 flex-1 items-center">
           <Link href="/" className="hover:animate-pulse relative">

@@ -7,12 +7,15 @@ export const bannerQuery = createApi({
   tagTypes: ['Banner'],
   endpoints: (builder) => ({
     getBannerList: builder.query({
-      query: ({ accessToken }) => ({
+      query: () => ({
         url: `/banner`,
         method: 'GET',
-        accessToken,
       }),
-      transformResponse: (response) => response.data,
+      transformResponse: (response) =>
+        response.data.map((el, index) => ({
+          ...el,
+          number: index + 1,
+        })),
       providesTags: [{ type: 'Banner', id: 'LIST' }],
     }),
     addBanner: builder.mutation({

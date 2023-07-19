@@ -1,29 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDeleteProductMutation } from '@/redux/reducers/productQuery';
-import clsx from 'clsx';
-import {
-  Alert,
-  Button,
-  Image,
-  Input,
-  Popconfirm,
-  Table,
-  TablePaginationConfig,
-  Tag,
-  Tooltip,
-  message,
-} from 'antd';
+import { Alert, Button, Table, TablePaginationConfig } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
-import useDebounce from '@/hooks/useDebounce';
 
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { IoAdd } from 'react-icons/io5';
 import AddVehicle from '@/components/admin/AddVehicle';
 import { useAppSelector } from '@/hooks';
 import UpdateVehicle from '@/components/admin/UpdateVehicle';
-import { useGetReservationListQuery } from '@/redux/reducers/reservationQuery';
 import { useGetBannerListQuery } from '@/redux/reducers/bannerQuery';
 
 export interface DataType {
@@ -34,19 +19,8 @@ export interface DataType {
   url: string;
 }
 
-interface TableParams {
-  pagination?: TablePaginationConfig;
-}
-
 export default function Banner() {
   const { accessToken } = useAppSelector((state) => state.auth);
-
-  const [params, setParams] = useState<TableParams>({
-    pagination: {
-      current: 1,
-      pageSize: 10,
-    },
-  });
 
   const [openModal, setOpenModal] = useState({
     detail: false,
@@ -58,20 +32,12 @@ export default function Banner() {
     setOpenModal((prev) => ({ ...prev, [type]: !prev[type] }));
   }, []);
 
-  const [selectedData, setSelectedData] = useState<DataType>(null);
-
   const { data, isFetching, error, refetch } = useGetBannerListQuery(
     {
       accessToken,
     },
     { refetchOnFocus: true }
   );
-
-  useEffect(() => {
-    setParams({
-      pagination: { ...params.pagination, total: data?.meta?.totalData },
-    });
-  }, [data]);
 
   const columns = useMemo<ColumnsType<DataType>>(
     () => [
@@ -80,12 +46,12 @@ export default function Banner() {
         dataIndex: 'number',
       },
       {
-        title: 'Judul',
-        dataIndex: 'title',
-      },
-      {
         title: 'Gambar',
         dataIndex: 'imageUrl',
+      },
+      {
+        title: 'Judul',
+        dataIndex: 'title',
       },
       {
         title: 'Url',
@@ -99,26 +65,10 @@ export default function Banner() {
     []
   );
 
-  const tableData = useMemo<DataType[]>(
-    () => (data?.data ? data.data : []),
-    [data?.data]
-  );
-
-  const tableChangeHandler = useCallback(
-    (pagination: TablePaginationConfig) => {
-      setParams({
-        pagination,
-      });
-    },
-    []
-  );
-
-  const clearSelectedData = useCallback(() => {
-    setSelectedData(null);
-  }, []);
+  const tableData = useMemo<DataType[]>(() => data ?? [], [data]);
 
   return (
-    <section className="p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
+    <section className="min-h-full p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
       <div className="flex justify-between items-center mb-[15px]">
         <h1 className="text-3xl font-bold m-0">Banner</h1>
         <Button
@@ -148,9 +98,8 @@ export default function Banner() {
         columns={columns}
         rowKey={'id'}
         dataSource={tableData}
-        pagination={params.pagination}
+        pagination={false}
         loading={isFetching}
-        onChange={tableChangeHandler}
         scroll={{ x: true }}
       />
       {/* <AddVehicle

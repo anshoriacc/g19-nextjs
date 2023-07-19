@@ -95,6 +95,8 @@ export default function RentalAdmin() {
       {
         title: '#',
         dataIndex: 'number',
+        render: (value) =>
+          (params.pagination.current - 1) * params.pagination.pageSize + value,
       },
       {
         title: 'Nama',
@@ -135,6 +137,7 @@ export default function RentalAdmin() {
       {
         title: 'Transmisi',
         dataIndex: 'transmission',
+        render: (value) => <span className="uppercase">{value}</span>,
       },
       {
         title: 'Jumlah Armada',
@@ -194,7 +197,7 @@ export default function RentalAdmin() {
         ),
       },
     ],
-    [accessToken, deleteVehicle, isDeleting, toggleModal]
+    [accessToken, deleteVehicle, isDeleting, params.pagination, toggleModal]
   );
 
   const tableData = useMemo<DataType[]>(
@@ -224,7 +227,7 @@ export default function RentalAdmin() {
   }, [errorDeleting, isDeleted]);
 
   return (
-    <section className="p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
+    <section className="min-h-full p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
       <h1 className="text-3xl font-bold">Kendaraan</h1>
       <div className="flex flex-col-reverse sm:flex-row gap-2 justify-between sm:items-center mb-3">
         <Input.Search
