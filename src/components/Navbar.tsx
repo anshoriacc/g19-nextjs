@@ -3,7 +3,16 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Avatar, Button, Dropdown, Layout, Menu, Tag, message } from 'antd';
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Layout,
+  Menu,
+  Popconfirm,
+  Tag,
+  message,
+} from 'antd';
 import type { MenuProps } from 'antd';
 import { BsChevronDown } from 'react-icons/bs';
 import { BiUser, BiHistory, BiLogOut, BiSolidUser } from 'react-icons/bi';
@@ -65,15 +74,21 @@ export default function Navbar() {
         icon: <BiUser size={16} />,
       },
       {
-        label: <Link href="/history">Riwayat</Link>,
-        key: 'history',
-        icon: <BiHistory size={16} />,
-      },
-      {
         type: 'divider',
       },
       {
-        label: <a onClick={logoutHandler}>Sign Out</a>,
+        label: (
+          <Popconfirm
+            placement="topRight"
+            title="Sign out"
+            description="Apakah anda yakin akan keluar?"
+            onConfirm={logoutHandler}
+            okText="Ya"
+            cancelText="Batal"
+          >
+            Sign Out
+          </Popconfirm>
+        ),
         key: 'logout',
         icon: <BiLogOut size={16} />,
         danger: true,

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import Image from 'next/image';
-import { notFound, redirect, useParams, useRouter } from 'next/navigation';
+import { notFound, useParams, useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
 import {
@@ -31,7 +31,7 @@ import {
   createReservationData,
 } from '@/redux/reducers/reservationSlice';
 import delimiterFormatter from '@/utils/delimiterFormatter';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch } from '@/hooks';
 
 export default function ProductDetail() {
   const dispatch = useAppDispatch();
@@ -40,9 +40,10 @@ export default function ProductDetail() {
   const { type, productId } = params;
   const [dates, setDates] = useState({ sDate: null, eDate: null });
   const [addOn, setAddOn] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { data, isFetching, error, refetch } = useGetProductDetailQuery({
-    type: type,
+    type,
     productId,
     sDate: type === 'rental' ? dates.sDate : null,
     eDate: type === 'rental' ? dates.eDate : null,
@@ -66,7 +67,7 @@ export default function ProductDetail() {
                     250000
                 )
               : 0)
-          : 0
+          : data?.price ?? 0
         : data?.price,
     [addOn, data?.driverMandatory, data?.price, dates.eDate, dates.sDate, type]
   );
@@ -135,6 +136,7 @@ export default function ProductDetail() {
 
   const createReservationHandler = useCallback(() => {
     dispatch(createReservationData(reservationData));
+    setLoading(true);
     router.push('/confirmation');
   }, [dispatch, reservationData, router]);
 
@@ -374,8 +376,8 @@ export default function ProductDetail() {
                       <span
                         className={clsx(
                           data?.availableStock > 0
-                            ? 'text-[green]'
-                            : 'text-[red]',
+                            ? 'text-green-500'
+                            : 'text-red-500',
                           'italic'
                         )}
                       >
@@ -398,14 +400,19 @@ export default function ProductDetail() {
                   />
                 </div>
               )}
-
+              {type === 'rental' && data && (
+                <h2 className="text-4xl font-bold text-[#ff6a30] text-right">
+                  Rp {delimiterFormatter(total)}
+                </h2>
+              )}
               <Button
                 type="primary"
                 size="large"
-                loading={isFetching}
+                loading={isFetching || loading}
                 disabled={
                   (type === 'rental' && data?.availableStock < 1) ||
-                  !(dates?.sDate && dates?.eDate)
+                  !(dates?.sDate && dates?.eDate) ||
+                  loading
                 }
                 onClick={createReservationHandler}
               >

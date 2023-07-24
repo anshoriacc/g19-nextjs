@@ -14,7 +14,6 @@ import {
   Popconfirm,
   Table,
   TablePaginationConfig,
-  Tag,
   Tooltip,
   message,
 } from 'antd';
@@ -26,6 +25,7 @@ import { IoAdd } from 'react-icons/io5';
 import AddVehicle from '@/components/admin/AddVehicle';
 import { useAppSelector } from '@/hooks';
 import UpdateVehicle from '@/components/admin/UpdateVehicle';
+import delimiterFormatter from '@/utils/delimiterFormatter';
 
 export interface DataType {
   number: number;
@@ -129,31 +129,22 @@ export default function TourAdmin() {
       {
         title: 'Harga',
         dataIndex: 'price',
+        render: (value) => `Rp ${delimiterFormatter(value)}`,
       },
       {
         title: 'Kapasitas',
         dataIndex: 'capacity',
+        render: (value) => `${value} orang`,
       },
       {
-        title: 'Transmisi',
-        dataIndex: 'transmission',
+        title: 'Durasi',
+        dataIndex: 'duration',
+        render: (value) => `${value} hari`,
       },
       {
-        title: 'Jumlah Armada',
-        dataIndex: 'quantity',
-      },
-      {
-        title: 'Driver / Lepas Kunci',
-        dataIndex: 'driverMandatory',
-        render: (driverMandatory: boolean) =>
-          driverMandatory ? (
-            <Tag color="volcano">Driver</Tag>
-          ) : (
-            <span className="flex gap-1">
-              <Tag color="volcano">Driver</Tag>
-              <Tag color="geekblue">Lepas Kunci</Tag>
-            </span>
-          ),
+        title: 'Keberangkatan',
+        dataIndex: 'availability',
+        render: (value) => (value === 'everyday' ? 'Setiap Hari' : 'Terjadwal'),
       },
       {
         title: 'Aksi',

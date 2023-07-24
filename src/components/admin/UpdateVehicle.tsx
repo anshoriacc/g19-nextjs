@@ -129,7 +129,7 @@ export default function UpdateVehicle({
     if (isOpenModal && isSuccess) {
       message.success('Berhasil update kendaraan.');
       setTimeout(() => {
-        form.resetFields()
+        form.resetFields();
         reset();
         toggle();
       }, 500);
@@ -146,12 +146,7 @@ export default function UpdateVehicle({
       }}
       footer={null}
     >
-      <Form
-        form={form}
-        initialValues={{ rememberMe: true }}
-        onFinish={submitHandler}
-        layout="vertical"
-      >
+      <Form form={form} onFinish={submitHandler} layout="vertical">
         <Form.Item
           label="Nama kendaraan"
           name="name"

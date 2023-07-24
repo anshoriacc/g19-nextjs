@@ -26,6 +26,7 @@ import { IoAdd } from 'react-icons/io5';
 import AddVehicle from '@/components/admin/AddVehicle';
 import { useAppSelector } from '@/hooks';
 import UpdateVehicle from '@/components/admin/UpdateVehicle';
+import delimiterFormatter from '@/utils/delimiterFormatter';
 
 export interface DataType {
   number: number;
@@ -129,6 +130,7 @@ export default function RentalAdmin() {
       {
         title: 'Harga',
         dataIndex: 'price',
+        render: (value, record, index) => `Rp ${delimiterFormatter(value)}`,
       },
       {
         title: 'Kapasitas',

@@ -9,6 +9,7 @@ import {
   Image,
   Input,
   Popconfirm,
+  Select,
   Table,
   TablePaginationConfig,
   Tag,
@@ -25,6 +26,8 @@ import { useAppSelector } from '@/hooks';
 import UpdateVehicle from '@/components/admin/UpdateVehicle';
 import { useGetReservationListQuery } from '@/redux/reducers/reservationQuery';
 import dayjs from 'dayjs';
+import delimiterFormatter from '@/utils/delimiterFormatter';
+import ActionReservation from '@/components/admin/ActionReservation';
 
 export interface DataType {
   number: number;
@@ -39,6 +42,13 @@ export interface DataType {
   user: any;
   vehicle?: any;
   tour?: any;
+  status:
+    | 'pending'
+    | 'paid'
+    | 'confirmed'
+    | 'on going'
+    | 'finished'
+    | 'cancelled';
 }
 
 interface TableParams {
@@ -47,6 +57,11 @@ interface TableParams {
 
 export default function ReservationAdmin() {
   const { accessToken } = useAppSelector((state) => state.auth);
+  const [queryParams, setQueryParams] = useState({
+    type: null,
+    status: null,
+    sortBy: 'newest',
+  });
 
   const [params, setParams] = useState<TableParams>({
     pagination: {
@@ -55,75 +70,96 @@ export default function ReservationAdmin() {
     },
   });
 
-  const [openModal, setOpenModal] = useState({
-    detail: false,
-    add: false,
-    update: false,
-  });
-
-  const toggleModal = useCallback((type: string) => {
-    setOpenModal((prev) => ({ ...prev, [type]: !prev[type] }));
-  }, []);
-
-  const [selectedData, setSelectedData] = useState<DataType>(null);
-
   const { data, isFetching, error, refetch } = useGetReservationListQuery(
     {
       accessToken,
       limit: params.pagination.pageSize,
       page: params.pagination.current,
-      sortBy: 'newest',
+      type: queryParams.type,
+      status: queryParams.status,
+      sortBy: queryParams.sortBy,
     },
     { refetchOnFocus: true }
   );
+
+  const changeParamsHandler = useCallback((params: string, value: any) => {
+    setQueryParams((prev) => ({ ...prev, [params]: value }));
+  }, []);
 
   useEffect(() => {
     setParams({
       pagination: { ...params.pagination, total: data?.meta?.totalData },
     });
-  }, [data]);
+  }, [data?.meta?.totalData]);
 
   const columns = useMemo<ColumnsType<DataType>>(
     () => [
       {
         title: '#',
         dataIndex: 'number',
-        render: (value, record, index) =>
+        render: (value) =>
           (params.pagination.current - 1) * params.pagination.pageSize + value,
       },
       {
         title: 'Tipe',
         dataIndex: 'type',
+        render: (value) =>
+          value === 'rental' ? (
+            <Tag color="#0073ce">RENTAL</Tag>
+          ) : (
+            <Tag color="#008080">TRIP</Tag>
+          ),
       },
       {
         title: 'Tanggal Mulai',
         dataIndex: 'startDate',
-        render: (value, record, index) => dayjs(value).format('DD MMM YYYY'),
+        render: (value) => dayjs(value).format('DD MMM YYYY'),
       },
       {
         title: 'Tanggal Selesai',
         dataIndex: 'endDate',
-        render: (value, record, index) => dayjs(value).format('DD MMM YYYY'),
+        render: (value) => dayjs(value).format('DD MMM YYYY'),
       },
       {
         title: 'Tambahan',
         dataIndex: 'addOn',
+        render: (value) => value ?? '-',
       },
       {
         title: 'Total',
         dataIndex: 'total',
+        render: (value) => `Rp ${delimiterFormatter(value)}`,
       },
       {
         title: 'Pembayaran',
         dataIndex: 'payment',
+        render: (value) => (value === 'case' ? 'Tunai' : 'Non Tunai'),
       },
       {
         title: 'Status',
         dataIndex: 'status',
+        render: (value) =>
+          value === 'cancelled' ? (
+            <Tag color="error">Dibatalkan</Tag>
+          ) : value === 'paid' ? (
+            <Tag color="processing">Terbayar</Tag>
+          ) : value === 'pending' ? (
+            <Tag color="warning">Pending</Tag>
+          ) : value === 'confirmed' ? (
+            <Tag color="success">Terkonfirmasi</Tag>
+          ) : value === 'finished' ? (
+            <Tag color="default">Selesai</Tag>
+          ) : (
+            <Tag color="default" className="capitalize">
+              {value}
+            </Tag>
+          ),
       },
       {
         title: 'Aksi',
-        dataIndex: 'action',
+        render: (value, record) => (
+          <ActionReservation id={record.id} status={record.status} />
+        ),
       },
     ],
     [params.pagination]
@@ -143,13 +179,66 @@ export default function ReservationAdmin() {
     []
   );
 
-  const clearSelectedData = useCallback(() => {
-    setSelectedData(null);
-  }, []);
-
   return (
     <section className="min-h-full p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
       <h1 className="text-3xl font-bold">Reservasi</h1>
+      <div className="flex flex-wrap gap-4 mb-4">
+        <Select
+          placeholder="filter by type"
+          onChange={(value) => changeParamsHandler('type', value)}
+          options={[
+            { value: 'rental', label: 'Rental' },
+            { value: 'tour', label: 'Trip' },
+          ]}
+          size="large"
+          className="w-fit"
+          allowClear
+        />
+        <Select
+          placeholder="filter by status"
+          onChange={(value) => changeParamsHandler('status', value)}
+          options={[
+            {
+              value: 'pending',
+              label: 'Pending',
+            },
+            {
+              value: 'paid',
+              label: 'Terbayar',
+            },
+            {
+              value: 'confirmed',
+              label: 'Konfirmasi',
+            },
+            {
+              value: 'on going',
+              label: 'On going',
+            },
+            {
+              value: 'finished',
+              label: 'Selesai',
+            },
+            {
+              value: 'cancelled',
+              label: 'Batalkan',
+            },
+          ]}
+          size="large"
+          className="w-fit"
+          allowClear
+        />
+        <Select
+          placeholder="urutkan"
+          onChange={(value) => changeParamsHandler('sortBy', value)}
+          options={[
+            { value: 'newest', label: 'Paling baru' },
+            { value: 'oldest', label: 'Paling lama' },
+          ]}
+          size="large"
+          className="w-fit"
+          allowClear
+        />
+      </div>
       {error && !isFetching && (
         <Alert
           message={
@@ -158,7 +247,7 @@ export default function ReservationAdmin() {
             </>
           }
           type="error"
-          className="mb-3"
+          className="mb-4"
           showIcon
           closable
         />
@@ -172,18 +261,6 @@ export default function ReservationAdmin() {
         onChange={tableChangeHandler}
         scroll={{ x: true }}
       />
-      {/* <AddVehicle
-        isOpenModal={openModal.add}
-        toggle={() => toggleModal('add')}
-      />
-      {selectedData && (
-        <UpdateVehicle
-          isOpenModal={openModal.update}
-          toggle={() => toggleModal('update')}
-          data={selectedData}
-          clearData={clearSelectedData}
-        />
-      )} */}
     </section>
   );
 }

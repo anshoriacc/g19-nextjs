@@ -9,7 +9,7 @@ import { FaPeopleGroup } from 'react-icons/fa6';
 
 interface Props {
   data?: any;
-  type?: 'rental' | 'tour';
+  type?: 'rental' | 'tour' | string;
   loading?: boolean;
 }
 

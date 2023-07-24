@@ -19,25 +19,23 @@ export const bannerQuery = createApi({
       providesTags: [{ type: 'Banner', id: 'LIST' }],
     }),
     addBanner: builder.mutation({
-      query: ({ accessToken, ...data }) => ({
+      query: ({ accessToken, formdata, data }) => ({
         url: `/banner`,
         method: 'POST',
         accessToken,
         data,
+        formdata,
       }),
-      transformResponse: (response) =>
-        response.data.map((el, index) => ({
-          ...el,
-          number: index + 1,
-        })),
+      transformResponse: (response) => response.data,
       invalidatesTags: [{ type: 'Banner', id: 'LIST' }],
     }),
     updateBanner: builder.mutation({
-      query: ({ accessToken, bannerId, ...data }) => ({
+      query: ({ accessToken, bannerId, formdata, data }) => ({
         url: `/banner/${bannerId}`,
         method: 'PATCH',
         accessToken,
         data,
+        formdata,
       }),
       transformResponse: (response) => response.data,
       invalidatesTags: [{ type: 'Banner', id: 'LIST' }],

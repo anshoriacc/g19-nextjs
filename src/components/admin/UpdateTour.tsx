@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useAppSelector } from '@/hooks';
-import { useAddProductMutation } from '@/redux/reducers/productQuery';
+import { useUpdateProductMutation } from '@/redux/reducers/productQuery';
 import {
   Button,
   Form,
@@ -10,13 +10,18 @@ import {
   Radio,
   Switch,
   Upload,
+  UploadFile,
+  UploadProps,
   message,
 } from 'antd';
+import { DataType } from '@/app/admin/product/rental/page';
 import { IoAdd } from 'react-icons/io5';
 
 interface Props {
   isOpenModal: boolean;
   toggle: () => void;
+  data: DataType;
+  clearData: () => void;
 }
 
 interface Body {
@@ -30,44 +35,80 @@ interface Body {
   images: [];
 }
 
-export default function AddTour({ isOpenModal, toggle }: Props) {
+export default function UpdateTour({
+  isOpenModal,
+  toggle,
+  data,
+  clearData,
+}: Props) {
   const { accessToken } = useAppSelector((state) => state.auth);
 
   const [form] = Form.useForm();
   const values = Form.useWatch([], form);
   const [submittable, setSubmittable] = useState(false);
 
-  const [addVehicle, { isLoading, error, isSuccess, reset }] =
-    useAddProductMutation();
+  const [updateVehicle, { isLoading, error, isSuccess, reset }] =
+    useUpdateProductMutation();
+
+  const [fileList, setFileList] = useState<UploadFile[]>(
+    data.images.map((image, index) => ({
+      uid: JSON.stringify(-(index + 1)),
+      name: 'image.png',
+      status: 'done',
+      url: image,
+    }))
+  );
 
   useEffect(() => {
     form.validateFields({ validateOnly: true }).then(
-      (e) => {
+      () => {
         setSubmittable(true);
       },
       () => {
         setSubmittable(false);
       }
     );
-  }, [form, values]);
+  }, [form, values, fileList]);
 
   const submitHandler = useCallback(
     (values: Body) => {
       const body = new FormData();
-      body.append('name', values.name);
-      body.append('description', values.description);
-      body.append('capacity', JSON.stringify(values.capacity));
-      body.append('price', JSON.stringify(values.price));
-      body.append('driverMandatory', JSON.stringify(!values.driverMandatory));
-      body.append('transmission', values.transmission);
-      body.append('quantity', JSON.stringify(values.quantity));
+      if (data.name !== values.name) body.append('name', values.name);
+      if (data.description !== values.description)
+        body.append('description', values.description);
+      if (parseInt(data.capacity) !== values.capacity)
+        body.append('capacity', JSON.stringify(values.capacity));
+      if (data.price !== values.price)
+        body.append('price', JSON.stringify(values.price));
+      if (data.driverMandatory !== values.driverMandatory)
+        body.append('driverMandatory', JSON.stringify(!values.driverMandatory));
+      if (data.transmission !== values.transmission)
+        body.append('transmission', values.transmission);
+      if (parseInt(data.quantity) !== values.quantity)
+        body.append('quantity', JSON.stringify(values.quantity));
       values.images.forEach((image: any) =>
-        body.append('images', image, image.name)
+        body.append('images[]', image, image.name)
       );
+      if (data.images.length !== fileList.length) {
+        if (fileList.length > 0) {
+          fileList
+            .map((file) => file.url)
+            .forEach((image: any) => body.append('oldImages[]', image));
+        }
+        if (fileList.length === 0) {
+          body.append('oldImages[]', '');
+        }
+      }
 
-      addVehicle({ accessToken, type: 'rental', formdata: true, data: body });
+      updateVehicle({
+        accessToken,
+        type: 'rental',
+        productId: data.id,
+        formdata: true,
+        data: body,
+      });
     },
-    [accessToken, addVehicle]
+    [accessToken, data, updateVehicle]
   );
 
   const normFile = useCallback((e: any) => {
@@ -77,11 +118,18 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
     return e?.fileList?.map((file: any) => file.originFileObj);
   }, []);
 
+  const oldImagesChangeHandler = useCallback<UploadProps['onChange']>(
+    ({ fileList: newFileList }) => {
+      setFileList(newFileList);
+    },
+    []
+  );
+
   useEffect(() => {
     if (isOpenModal && isSuccess) {
-      message.success('Berhasil menambah trip wisata.');
+      message.success('Berhasil update kendaraan.');
       setTimeout(() => {
-        form.resetFields()
+        form.resetFields();
         reset();
         toggle();
       }, 500);
@@ -90,21 +138,20 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
 
   return (
     <Modal
-      title={'Tambah Trip Wisata'}
+      title="Update Trip Wisata"
       open={isOpenModal}
-      onCancel={toggle}
+      onCancel={() => {
+        clearData();
+        toggle();
+      }}
       footer={null}
     >
-      <Form
-        form={form}
-        
-        onFinish={submitHandler}
-        layout="vertical"
-      >
+      <Form form={form} onFinish={submitHandler} layout="vertical">
         <Form.Item
           label="Nama kendaraan"
           name="name"
           rules={[{ required: true, message: 'Nama wajib diisi' }]}
+          initialValue={data.name}
         >
           <Input />
         </Form.Item>
@@ -113,6 +160,7 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
           label="Deskripsi"
           name="description"
           rules={[{ required: true, message: 'Deskripsi wajib diisi' }]}
+          initialValue={data.description}
         >
           <Input />
         </Form.Item>
@@ -121,6 +169,7 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
           label="Kapasitas"
           name="capacity"
           rules={[{ required: true, message: 'Kapasitas wajib diisi' }]}
+          initialValue={data.capacity}
         >
           <InputNumber addonAfter="orang" className="w-full" />
         </Form.Item>
@@ -129,6 +178,7 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
           label="Harga sewa"
           name="price"
           rules={[{ required: true, message: 'Harga sewa wajib diisi' }]}
+          initialValue={data.price}
         >
           <InputNumber addonBefore="Rp." className="w-full" />
         </Form.Item>
@@ -137,12 +187,16 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
           name="driverMandatory"
           label="Bisa lepas kunci?"
           valuePropName="checked"
-          initialValue={false}
+          initialValue={!data.driverMandatory}
         >
           <Switch />
         </Form.Item>
 
-        <Form.Item label="Transmisi" name="transmission" initialValue="manual">
+        <Form.Item
+          label="Transmisi"
+          name="transmission"
+          initialValue={data.transmission}
+        >
           <Radio.Group>
             <Radio.Button value="manual">manual</Radio.Button>
             <Radio.Button value="automatic">automatic</Radio.Button>
@@ -153,16 +207,30 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
           label="Jumlah armada"
           name="quantity"
           rules={[{ required: true, message: 'Jumlah armada wajib diisi' }]}
+          initialValue={data.quantity}
         >
           <InputNumber addonAfter="kendaraan" className="w-full" />
         </Form.Item>
+
+        <Upload
+          listType="picture-card"
+          showUploadList={true}
+          fileList={fileList}
+          onChange={oldImagesChangeHandler}
+        />
 
         <Form.Item
           label="Upload"
           name="images"
           valuePropName="images"
           getValueFromEvent={normFile}
-          rules={[{ required: true, message: 'Upload gambar minimal 1' }]}
+          rules={[
+            {
+              required: fileList.length < 1 ? true : false,
+              message: 'Upload gambar minimal 1',
+            },
+          ]}
+          initialValue={[]}
         >
           <Upload
             accept="image/png, image/jpg, image/jpeg, image/webp"
@@ -173,6 +241,7 @@ export default function AddTour({ isOpenModal, toggle }: Props) {
                 onSuccess('ok');
               }, 0);
             }}
+            // fileList={fileList}
           >
             <div>
               <IoAdd />

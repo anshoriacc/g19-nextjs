@@ -159,7 +159,6 @@ export default function Confirmation() {
                   )
                 )}
               </List>
-              {/* <p>{JSON.stringify(data)}</p> */}
             </div>
             <div className="w-[1px] bg-gray-300 dark:bg-gray-600" />
             <div className="flex flex-col justify-between">
@@ -190,7 +189,7 @@ export default function Confirmation() {
                                     dayjs(reservationData?.endDate),
                                     'day'
                                   )
-                            )}{' '}
+                            )}{' hari '}
                             x Rp {delimiterFormatter(data?.price ?? 0)}
                           </p>
                         )}
@@ -230,7 +229,7 @@ export default function Confirmation() {
                                       dayjs(reservationData?.endDate),
                                       'day'
                                     )
-                              )}{' '}
+                              )}{' hari '}
                               x Rp {delimiterFormatter(250000)}
                             </p>
                           )}
@@ -273,7 +272,7 @@ export default function Confirmation() {
                       </h2>
                     </div>
                     <div className="flex justify-between items-center">
-                      <p className="text-lg font-bold">Pembayaran</p>
+                      <p className="text-lg font-bold">Metode Pembayaran</p>
                       <Select
                         placeholder="Pilih pembayaran"
                         allowClear

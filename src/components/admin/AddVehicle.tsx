@@ -97,7 +97,6 @@ export default function AddVehicle({ isOpenModal, toggle }: Props) {
     >
       <Form
         form={form}
-        initialValues={{ rememberMe: true }}
         onFinish={submitHandler}
         layout="vertical"
       >

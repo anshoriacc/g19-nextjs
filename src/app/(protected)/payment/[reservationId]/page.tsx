@@ -109,6 +109,8 @@ export default function Payment() {
               !isFetching &&
               (data?.status === 'paid' || data?.status === 'confirmed')
                 ? 'Reservasi sudah terbayar / dikonfirmasi admin'
+                : data?.status === 'cancelled'
+                ? 'Pembayaran gagal, reservasi dibatalkan. Silakan reservasi ulang atau menghubungi admin.'
                 : 'Menunggu pembayaran / konfirmasi admin.'
             }
             extra={
