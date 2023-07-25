@@ -90,7 +90,12 @@ export default function Card({ type, data, loading }: Props) {
         {loading ? (
           <Skeleton.Input active />
         ) : (
-          <h3 className="font-bold text-[#ff6a30] flex items-baseline items- text-xl m-0 line-clamp-1">
+          <h3
+            className="font-bold text-[#ff6a30] text-xl m-0 line-clamp-1"
+            title={`Rp ${delimiterFormatter(data.price)}${
+              type === 'rental' ? '/hari' : ''
+            }`}
+          >
             Rp {delimiterFormatter(data.price)}{' '}
             {type === 'rental' && (
               <span className="text-gray-500 font-noormal text-sm">/hari</span>

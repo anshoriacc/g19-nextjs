@@ -17,7 +17,6 @@ export default function AdminLayout({ children }: PropsWithChildren) {
 
   useEffect(() => {
     if (userInfo.role !== 'admin') {
-      message.error('Silakan masuk sebagai administrator');
       redirect('/');
     }
   }, [userInfo.role]);

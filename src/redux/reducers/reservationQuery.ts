@@ -7,7 +7,7 @@ export const reservationQuery = createApi({
   tagTypes: ['Reservation'],
   endpoints: (builder) => ({
     getReservationList: builder.query({
-      query: ({ accessToken, type, status, sortBy, limit = 10, page = 1 }) => ({
+      query: ({ accessToken, type, status, sortBy, limit, page = 1 }) => ({
         url: `/reservation`,
         method: 'GET',
         accessToken,
