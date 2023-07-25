@@ -216,89 +216,91 @@ export default function Profile() {
             <p className="text-md">{userInfo.address}</p>
           </div>
         </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold">Riwayat Reservasi</h2>
-          <div className="flex flex-wrap gap-4 mb-4">
-            <Select
-              placeholder="filter by type"
-              onChange={(value) => changeParamsHandler('type', value)}
-              options={[
-                { value: 'rental', label: 'Rental' },
-                { value: 'tour', label: 'Trip' },
-              ]}
-              size="large"
-              className="w-[150px]"
-              allowClear
-            />
-            <Select
-              placeholder="filter by status"
-              onChange={(value) => changeParamsHandler('status', value)}
-              options={[
-                {
-                  value: 'pending',
-                  label: 'Pending',
-                },
-                {
-                  value: 'paid',
-                  label: 'Terbayar',
-                },
-                {
-                  value: 'confirmed',
-                  label: 'Terkonfirmasi',
-                },
-                {
-                  value: 'on going',
-                  label: 'On going',
-                },
-                {
-                  value: 'finished',
-                  label: 'Selesai',
-                },
-                {
-                  value: 'cancelled',
-                  label: 'Dibatalkan',
-                },
-              ]}
-              size="large"
-              className="w-[150px]"
-              allowClear
-            />
-            <Select
-              placeholder="urutkan"
-              onChange={(value) => changeParamsHandler('sortBy', value)}
-              options={[
-                { value: 'newest', label: 'Paling baru' },
-                { value: 'oldest', label: 'Paling lama' },
-              ]}
-              size="large"
-              className="w-[150px]"
-              allowClear
+        {userInfo?.role !== 'admin' && (
+          <div className="p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold">Riwayat Reservasi</h2>
+            <div className="flex flex-wrap gap-4 mb-4">
+              <Select
+                placeholder="filter by type"
+                onChange={(value) => changeParamsHandler('type', value)}
+                options={[
+                  { value: 'rental', label: 'Rental' },
+                  { value: 'tour', label: 'Trip' },
+                ]}
+                size="large"
+                className="w-[150px]"
+                allowClear
+              />
+              <Select
+                placeholder="filter by status"
+                onChange={(value) => changeParamsHandler('status', value)}
+                options={[
+                  {
+                    value: 'pending',
+                    label: 'Pending',
+                  },
+                  {
+                    value: 'paid',
+                    label: 'Terbayar',
+                  },
+                  {
+                    value: 'confirmed',
+                    label: 'Terkonfirmasi',
+                  },
+                  {
+                    value: 'on going',
+                    label: 'On going',
+                  },
+                  {
+                    value: 'finished',
+                    label: 'Selesai',
+                  },
+                  {
+                    value: 'cancelled',
+                    label: 'Dibatalkan',
+                  },
+                ]}
+                size="large"
+                className="w-[150px]"
+                allowClear
+              />
+              <Select
+                placeholder="urutkan"
+                onChange={(value) => changeParamsHandler('sortBy', value)}
+                options={[
+                  { value: 'newest', label: 'Paling baru' },
+                  { value: 'oldest', label: 'Paling lama' },
+                ]}
+                size="large"
+                className="w-[150px]"
+                allowClear
+              />
+            </div>
+            {error && !isFetching && (
+              <Alert
+                message={
+                  <>
+                    Gagal menarik data,{' '}
+                    <a onClick={refetch}>klik untuk refresh.</a>
+                  </>
+                }
+                type="error"
+                className="mb-4"
+                showIcon
+                closable
+              />
+            )}
+            <Table
+              columns={columns}
+              rowKey={'id'}
+              dataSource={tableData}
+              pagination={params.pagination}
+              loading={isFetching}
+              onChange={tableChangeHandler}
+              scroll={{ x: true }}
             />
           </div>
-          {error && !isFetching && (
-            <Alert
-              message={
-                <>
-                  Gagal menarik data,{' '}
-                  <a onClick={refetch}>klik untuk refresh.</a>
-                </>
-              }
-              type="error"
-              className="mb-4"
-              showIcon
-              closable
-            />
-          )}
-          <Table
-            columns={columns}
-            rowKey={'id'}
-            dataSource={tableData}
-            pagination={params.pagination}
-            loading={isFetching}
-            onChange={tableChangeHandler}
-            scroll={{ x: true }}
-          />
-        </div>
+        )}
       </main>
     </section>
   );
