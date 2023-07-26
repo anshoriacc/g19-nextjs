@@ -254,7 +254,11 @@ export default function TourAdmin() {
         columns={columns}
         rowKey={'id'}
         dataSource={tableData}
-        pagination={params.pagination}
+        pagination={{
+          ...params.pagination,
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} of ${total} items`,
+        }}
         loading={isFetching}
         onChange={tableChangeHandler}
         scroll={{ x: true }}

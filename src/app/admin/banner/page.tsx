@@ -92,7 +92,7 @@ export default function Banner() {
             <UpdateBanner data={record} />
             <Popconfirm
               placement="topRight"
-              title="Hapus kendaraan"
+              title="Hapus banner"
               description="Apakah anda yakin akan menghapus?"
               onConfirm={() =>
                 deleteBanner({
