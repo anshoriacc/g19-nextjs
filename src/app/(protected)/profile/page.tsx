@@ -7,6 +7,7 @@ import { BiSolidUser } from 'react-icons/bi';
 import Reservation from '@/components/profile/Reservation';
 import { useUpdateProfileMutation } from '@/redux/reducers/profileQuery';
 import { logout } from '@/redux/reducers/authSlice';
+import { redirect } from 'next/navigation';
 
 type Body = {
   email: string;
@@ -71,6 +72,10 @@ export default function Profile() {
       }, 500);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (userInfo?.role === 'admin') redirect('/admin');
+  }, []);
 
   return (
     <section className="w-full px-[5%] sm:px-[10%] py-6 flex flex-col">
