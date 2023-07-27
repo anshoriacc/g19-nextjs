@@ -7,7 +7,7 @@ export const profileQuery = createApi({
   tagTypes: ['Profile'],
   endpoints: (builder) => ({
     updateProfile: builder.mutation({
-      query: ({ accessToken, ...data }) => ({
+      query: ({ accessToken, data }) => ({
         url: `/profile`,
         method: 'PATCH',
         accessToken,
