@@ -17,7 +17,6 @@ export default function Login() {
   useEffect(() => {
     form.validateFields({ validateOnly: true }).then(
       (e) => {
-        console.log('e', e)
         setSubmittable(true);
       },
       () => {

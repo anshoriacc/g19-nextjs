@@ -261,6 +261,16 @@ export default function ReservationAdmin() {
             ? 'Selesai'
             : value,
       },
+      {
+        title: 'Tanggal Reservasi',
+        dataIndex: 'createdAt',
+        render: (value) => dayjs(value).format('DD MMM YYYY HH:mm:ss'),
+      },
+      {
+        title: 'Tanggal Diperbarui',
+        dataIndex: 'updatedAt',
+        render: (value) => dayjs(value).format('DD MMM YYYY HH:mm:ss'),
+      },
     ],
     []
   );
@@ -318,7 +328,7 @@ export default function ReservationAdmin() {
       .addDataSource(exportTableData, {
         str2Percent: true,
       })
-      .saveAs('Excel.xlsx');
+      .saveAs(`Rekap ${dayjs().format('DD-MM-YY HHmm')}.xlsx`);
   }, [columnsExcel, exportTableData]);
 
   return (

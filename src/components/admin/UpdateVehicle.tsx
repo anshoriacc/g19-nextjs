@@ -73,19 +73,13 @@ export default function UpdateVehicle({
   const submitHandler = useCallback(
     (values: Body) => {
       const body = new FormData();
-      if (data.name !== values.name) body.append('name', values.name);
-      if (data.description !== values.description)
-        body.append('description', values.description);
-      if (parseInt(data.capacity) !== values.capacity)
-        body.append('capacity', JSON.stringify(values.capacity));
-      if (data.price !== values.price)
-        body.append('price', JSON.stringify(values.price));
-      if (data.driverMandatory !== values.driverMandatory)
-        body.append('driverMandatory', JSON.stringify(!values.driverMandatory));
-      if (data.transmission !== values.transmission)
-        body.append('transmission', values.transmission);
-      if (parseInt(data.quantity) !== values.quantity)
-        body.append('quantity', JSON.stringify(values.quantity));
+      body.append('name', values.name);
+      body.append('description', values.description);
+      body.append('capacity', JSON.stringify(values.capacity));
+      body.append('price', JSON.stringify(values.price));
+      body.append('driverMandatory', JSON.stringify(!values.driverMandatory));
+      body.append('transmission', values.transmission);
+      body.append('quantity', JSON.stringify(values.quantity));
       values.images.forEach((image: any) =>
         body.append('images', image, image.name)
       );
@@ -95,9 +89,9 @@ export default function UpdateVehicle({
             .map((file) => file.url)
             .forEach((image: any) => body.append('oldImages[]', image));
         }
-        if (fileList.length === 0) {
-          body.append('oldImages[]', '');
-        }
+        // if (fileList.length === 0) {
+        //   body.append('oldImages[]', '');
+        // }
       }
 
       updateVehicle({

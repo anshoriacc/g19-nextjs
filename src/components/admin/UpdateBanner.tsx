@@ -29,7 +29,6 @@ interface Body {
 }
 
 export default function UpdateBanner({ data }: Props) {
-  console.log('data', data);
   const { accessToken } = useAppSelector((state) => state.auth);
   const [form] = Form.useForm();
   const values = Form.useWatch([], form);
@@ -66,10 +65,9 @@ export default function UpdateBanner({ data }: Props) {
   const submitHandler = useCallback(
     (values: Body) => {
       const body = new FormData();
-      if (data.title !== values.title) body.append('title', values.title);
-      if (data.url !== values.url) body.append('url', values.url);
-      if (data.isDisplayed !== values.isDisplayed)
-        body.append('isDisplayed', JSON.stringify(values.isDisplayed));
+      body.append('title', values.title);
+      body.append('url', values.url);
+      body.append('isDisplayed', JSON.stringify(values.isDisplayed));
       if (values.image.length > 0)
         body.append('image', values.image[0], values.image[0].name);
 
@@ -153,37 +151,6 @@ export default function UpdateBanner({ data }: Props) {
           >
             <Switch />
           </Form.Item>
-
-          {/* <Form.Item
-            label="Upload"
-            name="image"
-            valuePropName="image"
-            getValueFromEvent={normFile}
-            rules={[
-              {
-                required: fileList.length < 1 ? true : false,
-                message: 'Upload gambar minimal 1',
-              },
-            ]}
-          >
-            <Upload
-              accept="image/png, image/jpg, image/jpeg, image/webp"
-              listType="picture-card"
-              showUploadList={true}
-              customRequest={({ onSuccess }) => {
-                setTimeout(() => {
-                  onSuccess('ok');
-                }, 0);
-              }}
-            >
-              {form.getFieldValue('image')?.length > 0 ? null : (
-                <div>
-                  <IoAdd />
-                  <div style={{ marginTop: 8 }}>Upload</div>
-                </div>
-              )}
-            </Upload>
-          </Form.Item> */}
 
           <Upload
             listType="picture-card"

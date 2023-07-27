@@ -103,12 +103,7 @@ export default function TourAdmin() {
         dataIndex: 'name',
         render: (value, record) => (
           <div className="flex gap-2 items-center">
-            <Image.PreviewGroup
-              preview={{
-                onChange: (current, prev) =>
-                  console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
-            >
+            <Image.PreviewGroup preview={{}}>
               {record.images.map((image, index) => (
                 <div key={index} className={clsx(index > 0 ? 'hidden' : '')}>
                   <Image
