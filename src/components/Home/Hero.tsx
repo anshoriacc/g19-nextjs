@@ -20,7 +20,7 @@ export default function Hero() {
           data.map((banner, index) => (
             <div key={index} className="p-4 h-full flex">
               <Link
-                href={banner?.url ?? '#'}
+                href={banner?.url ? banner?.url : '#'}
                 target={banner?.url ? '_blank' : ''}
                 className="block w-full max-w-[960px] mx-auto aspect-[3] relative rounded-lg overflow-hidden shadow-md"
                 title={banner.title}

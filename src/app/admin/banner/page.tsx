@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { AiFillDelete } from 'react-icons/ai';
 import { IoAdd } from 'react-icons/io5';
 import { useAppSelector } from '@/hooks';
 import {
@@ -34,7 +34,6 @@ export interface DataType {
 
 export default function Banner() {
   const { accessToken } = useAppSelector((state) => state.auth);
-
   const [openModal, setOpenModal] = useState(false);
 
   const toggleModal = useCallback(() => {
