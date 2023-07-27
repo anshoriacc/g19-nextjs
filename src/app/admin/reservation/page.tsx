@@ -115,7 +115,7 @@ export default function ReservationAdmin() {
       {
         title: 'Telepon',
         dataIndex: 'phone',
-        render: (value) => value ?? '-',
+        render: (value) => (value ? value : '-'),
       },
       {
         title: 'Produk',
@@ -134,7 +134,7 @@ export default function ReservationAdmin() {
       {
         title: 'Tambahan',
         dataIndex: 'addOn',
-        render: (value) => value ?? '-',
+        render: (value) => (value ? value : '-'),
       },
       {
         title: 'Total',
@@ -208,7 +208,7 @@ export default function ReservationAdmin() {
         title: 'Telepon',
         dataIndex: 'phone',
         key: 'phone',
-        render: (value) => value ?? '-',
+        render: (value) => (value ? value : '-'),
       },
       {
         title: 'Produk',
@@ -231,7 +231,7 @@ export default function ReservationAdmin() {
         title: 'Tambahan',
         dataIndex: 'addOn',
         key: 'addOn',
-        render: (value) => value ?? '-',
+        render: (value) => (value ? value : '-'),
       },
       {
         title: 'Total (Rp)',

@@ -197,11 +197,6 @@ export default function RentalAdmin() {
     [accessToken, deleteVehicle, isDeleting, params.pagination, toggleModal]
   );
 
-  const tableData = useMemo<DataType[]>(
-    () => (data?.data ? data.data : []),
-    [data?.data]
-  );
-
   const tableChangeHandler = useCallback(
     (pagination: TablePaginationConfig) => {
       setParams({
@@ -260,7 +255,7 @@ export default function RentalAdmin() {
       <Table
         columns={columns}
         rowKey={'id'}
-        dataSource={tableData}
+        dataSource={data?.data ?? []}
         pagination={{
           ...params.pagination,
           showTotal: (total, range) =>

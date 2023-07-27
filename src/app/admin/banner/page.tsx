@@ -21,6 +21,7 @@ import {
 } from '@/redux/reducers/bannerQuery';
 import AddBanner from '@/components/admin/AddBanner';
 import UpdateBanner from '@/components/admin/UpdateBanner';
+import clsx from 'clsx';
 
 export interface DataType {
   number: number;
@@ -78,11 +79,7 @@ export default function Banner() {
       {
         title: 'Url',
         dataIndex: 'url',
-        render: (value) => value ?? '-',
-      },
-      {
-        title: 'Ditampilkan',
-        dataIndex: 'isDisplayed',
+        render: (value) => (value ? value : '-'),
       },
       {
         title: 'Aksi',
@@ -103,9 +100,15 @@ export default function Banner() {
               okButtonProps={{ loading: isDeleting }}
               okText="Ya"
               cancelText="Batal"
+              disabled={data?.length <= 1}
             >
               <Tooltip title="delete">
-                <a className="text-lg">
+                <a
+                  className={clsx(
+                    'text-lg',
+                    data?.length <= 1 ? 'cursor-not-allowed' : ''
+                  )}
+                >
                   <AiFillDelete color="red" />
                 </a>
               </Tooltip>
@@ -114,10 +117,8 @@ export default function Banner() {
         ),
       },
     ],
-    []
+    [accessToken, data?.length, deleteBanner, isDeleting]
   );
-
-  const tableData = useMemo<DataType[]>(() => data ?? [], [data]);
 
   useEffect(() => {
     if (isDeleted) message.success('Berhasil menghapus banner');
@@ -155,7 +156,7 @@ export default function Banner() {
       <Table
         columns={columns}
         rowKey={'id'}
-        dataSource={tableData}
+        dataSource={data ?? []}
         pagination={false}
         loading={isFetching}
         scroll={{ x: true }}

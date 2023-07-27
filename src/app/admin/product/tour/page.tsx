@@ -185,11 +185,6 @@ export default function TourAdmin() {
     [accessToken, deleteVehicle, isDeleting, toggleModal]
   );
 
-  const tableData = useMemo<DataType[]>(
-    () => (data?.data ? data.data : []),
-    [data?.data]
-  );
-
   const tableChangeHandler = useCallback(
     (pagination: TablePaginationConfig) => {
       setParams({
@@ -248,7 +243,7 @@ export default function TourAdmin() {
       <Table
         columns={columns}
         rowKey={'id'}
-        dataSource={tableData}
+        dataSource={data?.data ?? []}
         pagination={{
           ...params.pagination,
           showTotal: (total, range) =>
