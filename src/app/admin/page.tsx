@@ -230,7 +230,7 @@ export default function DashboardAdmin() {
 
   return (
     <section className="p-4 bg-white dark:bg-gray-900 flex flex-col rounded-lg overflow-hidden">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">Beranda</h1>
       <DatePicker
         onChange={onChange}
         picker="year"
@@ -252,7 +252,7 @@ export default function DashboardAdmin() {
           closable
         />
       )}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Card loading={isFetching}>
             <Statistic
@@ -286,7 +286,7 @@ export default function DashboardAdmin() {
               message={
                 <>
                   Gagal menarik data,{' '}
-                  <a onClick={refetch}>klik untuk refresh.</a>
+                  <a onClick={refetchReservation}>klik untuk refresh.</a>
                 </>
               }
               type="error"
