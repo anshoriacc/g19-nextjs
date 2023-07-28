@@ -32,6 +32,17 @@ export const reservationQuery = createApi({
       providesTags: (result) =>
         result ? [{ type: 'Reservation', id: result.id }] : null,
     }),
+    getReservationStats: builder.query({
+      query: ({ accessToken, year }) => ({
+        url: `/reservation/stats`,
+        method: 'GET',
+        accessToken,
+        params: { year },
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: (result) =>
+        result ? [{ type: 'Reservation', id: result.id }] : null,
+    }),
     addReservation: builder.mutation({
       query: ({ accessToken, ...data }) => ({
         url: `/reservation`,
@@ -61,6 +72,7 @@ export const reservationQuery = createApi({
 export const {
   useGetReservationListQuery,
   useGetReservationDetailQuery,
+  useGetReservationStatsQuery,
   useAddReservationMutation,
   useUpdateReservationMutation,
 } = reservationQuery;
