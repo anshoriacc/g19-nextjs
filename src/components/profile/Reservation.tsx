@@ -3,12 +3,21 @@
 import { useAppSelector } from '@/hooks';
 import { useGetReservationListQuery } from '@/redux/reducers/reservationQuery';
 import delimiterFormatter from '@/utils/delimiterFormatter';
-import { Alert, TablePaginationConfig, Tag, Table, Select, Image } from 'antd';
+import {
+  Alert,
+  TablePaginationConfig,
+  Tag,
+  Table,
+  Select,
+  Image,
+  Modal,
+} from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import React, { useCallback, useMemo, useState } from 'react';
 import { DataType } from '@/app/admin/reservation/page';
+import DetailReservation from './DetailReservation';
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -16,6 +25,21 @@ interface TableParams {
 
 export default function Reservation() {
   const { accessToken } = useAppSelector((state) => state.auth);
+  const [selectedData, setSelectedData] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const toggleModal = useCallback(
+    (data) => {
+      if (openModal) {
+        setSelectedData(null);
+      } else {
+        setSelectedData(data);
+      }
+      setOpenModal((modal) => !modal);
+    },
+    [openModal]
+  );
+
   const [queryParams, setQueryParams] = useState({
     type: null,
     status: null,
@@ -235,13 +259,26 @@ export default function Reservation() {
       )}
       <Table
         columns={columns}
+        onRow={(record, rowIndex) => ({
+          onClick: () => {
+            toggleModal(record);
+          },
+        })}
         rowKey={'id'}
+        rowClassName="cursor-pointer"
         dataSource={tableData}
         pagination={params.pagination}
         loading={isFetching}
         onChange={tableChangeHandler}
         scroll={{ x: true }}
       />
+      {selectedData && (
+        <DetailReservation
+          openModal={openModal}
+          toggleModal={toggleModal}
+          data={selectedData}
+        />
+      )}
     </div>
   );
 }
