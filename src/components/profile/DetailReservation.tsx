@@ -35,7 +35,7 @@ export default function DetailReservation({ openModal, toggleModal, data }) {
             <Skeleton.Input active />
             <Divider dashed className="my-2" />
             <Skeleton.Input active size="small" block />
-            <div className="mb-2 p-2 border border-solid rounded-lg border-[#f0f0f0] mb-4">
+            <div className="p-2 border border-solid rounded-lg border-[#f0f0f0] mb-4">
               <Skeleton.Input active className="mb-2" />
               <div className="flex gap-2 items-center">
                 <Skeleton.Image active />
